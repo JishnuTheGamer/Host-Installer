@@ -3,6 +3,12 @@
 # Installer GUI Script for Draco and Skyport Panels
 # Author: [Your Name or GitHub Handle]
 
+# Colors for terminal output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+CYAN='\033[0;36m'
+NC='\033[0m' # No Color
+
 # Function to show an error message
 function show_error {
   zenity --error --text="$1"
@@ -53,22 +59,27 @@ while true; do
   case $PANEL in
     "Draco Panel")
       if show_progress "draco"; then
+        echo -e "${GREEN}Draco Panel installation completed successfully!${NC}"
         show_info "Draco Panel installation completed successfully!"
       else
+        echo -e "${RED}Failed to install Draco Panel.${NC}"
         show_error "Failed to install Draco Panel."
       fi
       ;;
     "Skyport Panel")
       if show_progress "skyport"; then
+        echo -e "${GREEN}Skyport Panel installation completed successfully!${NC}"
         show_info "Skyport Panel installation completed successfully!"
       else
+        echo -e "${RED}Failed to install Skyport Panel.${NC}"
         show_error "Failed to install Skyport Panel."
       fi
       ;;
     *)
+      echo -e "${RED}Invalid selection.${NC}"
       show_error "Invalid selection."
       ;;
   esac
 done
 
-show_info "Thank you for using the Panel Installer!"
+echo -e "${CYAN}Thank you for using the Panel Installer!${NC}"
