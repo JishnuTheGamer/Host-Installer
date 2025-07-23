@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Installer GUI Script
-# This script provides a graphical interface for installing various panels.
+# Installer GUI Script for Draco Panel
+# This script provides a graphical interface for installing the Draco Panel.
 # Author: [Your Name or GitHub Handle]
 
 # Function to show an error message
@@ -14,10 +14,12 @@ function show_info {
   zenity --info --text="$1"
 }
 
-# Function to show a progress bar
+# Function to show a progress bar during installation
 function show_progress {
   (
     echo "0" # Initial percentage
+    echo "Starting installation of Draco Panel..."
+    
     # Run the installation command
     bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Panel-Installer/main/Script/Draco%20panel) 2>&1 | while read line; do
       echo "$line" # Output the installation log
@@ -27,7 +29,7 @@ function show_progress {
   ) | zenity --progress --title="Installing Draco Panel" --text="Starting installation..." --percentage=0 --auto-close --width=400 --height=200
 }
 
-# Main GUI
+# Main GUI Loop
 while true; do
   PANEL=$(zenity --list --title="Panel Installer" \
     --column="Select a Panel" \
@@ -39,7 +41,7 @@ while true; do
     break
   fi
 
-  # Run the corresponding installer script based on user selection
+  # Run the installation for Draco Panel
   case $PANEL in
     "Draco Panel")
       # Show progress bar and run the installation
