@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Installer GUI Script for Draco and Skyport Panels
+# Installer Script for Draco and Skyport Panels
 # Author: [Your Name or GitHub Handle]
 
 # Colors for terminal output
@@ -9,77 +9,53 @@ GREEN='\033[0;32m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
-# Function to show an error message
+# Function to display messages
+function echo_message {
+  echo -e "${CYAN}$1${NC}"
+}
+
+# Function to show error messages
 function show_error {
-  zenity --error --text="$1"
+  echo -e "${RED}Error: $1${NC}"
 }
 
-# Function to show an info message
-function show_info {
-  zenity --info --text="$1"
+# Function to show success messages
+function show_success {
+  echo -e "${GREEN}$1${NC}"
 }
 
-# Function to show a progress bar during installation
-function show_progress {
-  (
-    echo "0" # Initial percentage
-    echo "Starting installation..."
+# Check if the script is run as root
+if [ "$EUID" -ne 0 ]; then
+  show_error "Please run this script as root."
+  exit 1
+fi
 
-    # Run the installation command based on the panel selected
-    if [ "$1" == "draco" ]; then
-      bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/jishnu) 2>&1 | while read line; do
-        echo "$line" # Output the installation log
-        sleep 1 # Simulate time taken for each line (adjust as necessary)
-        echo "100" # Final percentage
-      done
-    elif [ "$1" == "skyport" ]; then
-      bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/skyport/refs/heads/main/panel) 2>&1 | while read line; do
-        echo "$line" # Output the installation log
-        sleep 1 # Simulate time taken for each line (adjust as necessary)
-        echo "100" # Final percentage
-      done
-    fi
-  ) | zenity --progress --title="Installing Panel" --text="Starting installation..." --percentage=0 --auto-close --width=400 --height=200
-}
+# Display menu
+echo_message "Select a panel to install:"
+echo "1) Draco Panel"
+echo "2) Skyport Panel"
+echo "3) Exit"
 
-# Main GUI Loop
-while true; do
-  PANEL=$(zenity --list --title="Panel Installer" \
-    --column="Select a Panel" \
-    "Draco Panel" \
-    "Skyport Panel" \
-    "Exit")
+# Read user input
+read -p "Enter your choice [1-3]: " choice
 
-  # Check if the user selected "Exit"
-  if [ "$PANEL" == "Exit" ]; then
-    break
-  fi
-
-  # Run the installation for the selected panel
-  case $PANEL in
-    "Draco Panel")
-      if show_progress "draco"; then
-        echo -e "${GREEN}Draco Panel installation completed successfully!${NC}"
-        show_info "Draco Panel installation completed successfully!"
-      else
-        echo -e "${RED}Failed to install Draco Panel.${NC}"
-        show_error "Failed to install Draco Panel."
-      fi
-      ;;
-    "Skyport Panel")
-      if show_progress "skyport"; then
-        echo -e "${GREEN}Skyport Panel installation completed successfully!${NC}"
-        show_info "Skyport Panel installation completed successfully!"
-      else
-        echo -e "${RED}Failed to install Skyport Panel.${NC}"
-        show_error "Failed to install Skyport Panel."
-      fi
-      ;;
-    *)
-      echo -e "${RED}Invalid selection.${NC}"
-      show_error "Invalid selection."
-      ;;
-  esac
-done
-
-echo -e "${CYAN}Thank you for using the Panel Installer!${NC}"
+case $choice in
+  1)
+    echo_message "Installing Draco Panel..."
+    bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/jishnu)
+    show_success "Draco Panel installation completed!"
+    ;;
+  2)
+    echo_message "Installing Skyport Panel..."
+    bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/skyport/refs/heads/main/panel)
+    show_success "Skyport Panel installation completed!"
+    ;;
+  3)
+    echo_message "Exiting..."
+    exit 0
+    ;;
+  *)
+    show_error "Invalid selection. Please run the script again and choose a valid option."
+    exit 1
+    ;;
+esac
