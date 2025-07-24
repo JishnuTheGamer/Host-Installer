@@ -21,47 +21,61 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
-# Display menu
+# Display main menu
 echo_message "====================="
 echo_message "Select an option:"
-echo "1) Install Draco Panel"
-echo "2) Install Skyport Panel"
-echo "3) Run Daemon"
-echo "4) Start Panel"
-echo "5) Start Daemon"
-echo "6) Exit"
+echo "1) Install Panel"
+echo "2) Run Daemon"
+echo "3) Start Panel"
+echo "4) Start Daemon"
+echo "5) Exit"
 echo_message "====================="
 
-# Read user input
-read -p "Enter your choice [1-6]: " choice
+# Read user input for main menu
+read -p "Enter your choice [1-5]: " choice
 
 case $choice in
   1)
-    echo_message "Installing Draco Panel..."
-    bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/draco)
-    echo_message "Draco Panel installation completed!"
+    # Sub-menu for panel installation
+    echo_message "====================="
+    echo_message "Select a panel to install:"
+    echo "1) Draco Panel"
+    echo "2) Skyport Panel"
+    echo_message "====================="
+    read -p "Enter your choice [1-2]: " panel_choice
+    case $panel_choice in
+      1)
+        echo_message "Installing Draco Panel..."
+        bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/draco)
+        echo_message "Draco Panel installation completed!"
+        ;;
+      2)
+        echo_message "Installing Skyport Panel..."
+        bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/skyport)
+        echo_message "Skyport Panel installation completed!"
+        ;;
+      *)
+        echo -e "${RED}Invalid selection. Returning to main menu.${NC}"
+        exit 1
+        ;;
+    esac
     ;;
   2)
-    echo_message "Installing Skyport Panel..."
-    bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/skyport)
-    echo_message "Skyport Panel installation completed!"
-    ;;
-  3)
     echo_message "Running Daemon..."
     bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/daemon)
     echo_message "Daemon has been executed!"
     ;;
-  4)
+  3)
     echo_message "Starting Panel..."
-    cd panel && cd panel && node .
+    cd v3panel && pm2 start panel
     echo_message "Panel has been started!"
     ;;
-  5)
+  4)
     echo_message "Starting Daemon..."
-    cd daemon && cd daemon && node .
+    cd daemon && pm2 start daemon
     echo_message "Daemon has been started!"
     ;;
-  6)
+  5)
     echo_message "Exiting..."
     exit 0
     ;;
@@ -72,7 +86,7 @@ case $choice in
 esac
 
 # Prompt to install the daemon (wings) after panel installation
-if [[ "$choice" == "1" || "$choice" == "2" ]]; then
+if [[ "$choice" == "1" ]]; then
   echo -e "${YELLOW}Do you want to install the daemon (wings)? (yes/no): ${NC}"
   read install_daemon
   if [[ "$install_daemon" == "yes" || "$install_daemon" == "y" ]]; then
