@@ -20,21 +20,17 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
-# Get the current date
-CURRENT_DATE=$(date +"%A, %B %d, %Y")
-echo_message "Today is $CURRENT_DATE"
-
 # Display menu
-echo -e "${CYAN}=====================${NC}"
-echo_message "Select a panel to install:"
-echo -e "${CYAN}=====================${NC}"
-echo "1) Draco Panel"
-echo "2) Skyport Panel"
-echo "3) Exit"
-echo -e "${CYAN}=====================${NC}"
+echo_message "====================="
+echo_message "Select an option:"
+echo "1) Install Draco Panel"
+echo "2) Install Skyport Panel"
+echo "3) Run Daemon"
+echo "4) Exit"
+echo_message "====================="
 
 # Read user input
-read -p "Enter your choice [1-3]: " choice
+read -p "Enter your choice [1-4]: " choice
 
 case $choice in
   1)
@@ -48,6 +44,11 @@ case $choice in
     echo_message "Skyport Panel installation completed!"
     ;;
   3)
+    echo_message "Running Daemon..."
+    bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/node)
+    echo_message "Daemon has been executed!"
+    ;;
+  4)
     echo_message "Exiting..."
     exit 0
     ;;
