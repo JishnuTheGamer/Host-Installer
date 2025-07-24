@@ -53,12 +53,12 @@ case $choice in
     ;;
   4)
     echo_message "Starting Panel..."
-    cd panel && cd panel && pm2 start .
+    cd panel && cd panel && node .
     echo_message "Panel has been started!"
     ;;
   5)
     echo_message "Starting Daemon..."
-    cd daemon && pm2 start daemon
+    cd daemon && cd daemon && node .
     echo_message "Daemon has been started!"
     ;;
   6)
