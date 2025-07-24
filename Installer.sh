@@ -24,10 +24,14 @@ fi
 # Function for Main Menu
 function main_menu {
   while true; do
-    echo_message "===================== Main Menu: 1) Install Panel 2) Exit ====================="
+    echo_message "====================="
+    echo_message "Main Menu:"
+    echo "1) Install Panel"
+    echo "2) Exit"
+    echo_message "====================="
     read -p "Enter your choice [1-2]: " choice
     case $choice in
-      1) panel_menu ;;
+      1) clear; panel_menu ;;  # Clear screen before sub-menu
       2) echo_message "Exiting..."; exit 0 ;;
       *) echo -e "${RED}Invalid selection. Try again.${NC}" ;;
     esac
@@ -37,12 +41,17 @@ function main_menu {
 # Function for Panel Selection Sub-Menu
 function panel_menu {
   while true; do
-    echo_message "===================== Select Panel Type: 1) Draco 2) Skyport 3) Back ====================="
+    echo_message "====================="
+    echo_message "Select Panel Type:"
+    echo "1) Draco"
+    echo "2) Skyport"
+    echo "3) Back"
+    echo_message "====================="
     read -p "Enter your choice [1-3]: " sub_choice
     case $sub_choice in
-      1) draco_menu ;;
-      2) skyport_menu ;;
-      3) return ;;  # Back to main menu
+      1) clear; draco_menu ;;  # Clear screen before sub-sub-menu
+      2) clear; skyport_menu ;;  # Clear screen before sub-sub-menu
+      3) clear; return ;;  # Clear screen and back to main menu
       *) echo -e "${RED}Invalid selection. Try again.${NC}" ;;
     esac
   done
@@ -51,7 +60,14 @@ function panel_menu {
 # Function for Draco Sub-Sub-Menu
 function draco_menu {
   while true; do
-    echo_message "===================== Draco Options: 1) Install Draco Panel 2) Install Draco Daemon (wings) 3) Start Panel 4) Start Daemon 5) Back ====================="
+    echo_message "====================="
+    echo_message "Draco Options:"
+    echo "1) Install Draco Panel"
+    echo "2) Install Draco Daemon (wings)"
+    echo "3) Start Panel"
+    echo "4) Start Daemon"
+    echo "5) Back"
+    echo_message "====================="
     read -p "Enter your choice [1-5]: " draco_choice
     case $draco_choice in
       1)
@@ -59,23 +75,27 @@ function draco_menu {
         bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/draco)
         echo_message "Draco Panel installation completed!"
         prompt_daemon
+        clear  # Clear screen after command
         ;;
       2)
         echo_message "Installing Draco Daemon (wings)..."
         bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/daemon)
         echo_message "Draco Daemon (wings) installation completed!"
+        clear  # Clear screen after command
         ;;
       3)
         echo_message "Starting Panel..."
         cd panel && cd panel && node .
         echo_message "Panel has been started!"
+        clear  # Clear screen after command
         ;;
       4)
         echo_message "Starting Daemon..."
         cd daemon && cd daemon && node .
         echo_message "Daemon has been started!"
+        clear  # Clear screen after command
         ;;
-      5) return ;;  # Back to panel menu
+      5) clear; return ;;  # Clear screen and back to panel menu
       *) echo -e "${RED}Invalid selection. Try again.${NC}" ;;
     esac
   done
@@ -84,7 +104,14 @@ function draco_menu {
 # Function for Skyport Sub-Sub-Menu
 function skyport_menu {
   while true; do
-    echo_message "===================== Skyport Options: 1) Install Skyport Panel 2) Install Daemon (wings) 3) Start Panel 4) Start Daemon 5) Back ====================="
+    echo_message "====================="
+    echo_message "Skyport Options:"
+    echo "1) Install Skyport Panel"
+    echo "2) Install Daemon (wings)"
+    echo "3) Start Panel"
+    echo "4) Start Daemon"
+    echo "5) Back"
+    echo_message "====================="
     read -p "Enter your choice [1-5]: " skyport_choice
     case $skyport_choice in
       1)
@@ -92,23 +119,27 @@ function skyport_menu {
         bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/skyport)
         echo_message "Skyport Panel installation completed!"
         prompt_daemon
+        clear  # Clear screen after command
         ;;
       2)
         echo_message "Installing Daemon (wings)..."
         bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/daemon)
         echo_message "Daemon (wings) installation completed!"
+        clear  # Clear screen after command
         ;;
       3)
         echo_message "Starting Panel..."
         cd panel && cd panel && node .
         echo_message "Panel has been started!"
+        clear  # Clear screen after command
         ;;
       4)
         echo_message "Starting Daemon..."
         cd daemon && cd daemon && node .
         echo_message "Daemon has been started!"
+        clear  # Clear screen after command
         ;;
-      5) return ;;  # Back to panel menu
+      5) clear; return ;;  # Clear screen and back to panel menu
       *) echo -e "${RED}Invalid selection. Try again.${NC}" ;;
     esac
   done
