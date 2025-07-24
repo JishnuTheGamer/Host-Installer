@@ -7,6 +7,7 @@
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 CYAN='\033[0;36m'
+YELLOW='\033[1;33m' # Yellow for prompts
 NC='\033[0m' # No Color
 
 # Function to display messages
@@ -26,11 +27,13 @@ echo_message "Select an option:"
 echo "1) Install Draco Panel"
 echo "2) Install Skyport Panel"
 echo "3) Run Daemon"
-echo "4) Exit"
+echo "4) Start Panel"
+echo "5) Start Daemon"
+echo "6) Exit"
 echo_message "====================="
 
 # Read user input
-read -p "Enter your choice [1-4]: " choice
+read -p "Enter your choice [1-6]: " choice
 
 case $choice in
   1)
@@ -49,6 +52,16 @@ case $choice in
     echo_message "Daemon has been executed!"
     ;;
   4)
+    echo_message "Starting Panel..."
+    cd v3panel && pm2 start panel
+    echo_message "Panel has been started!"
+    ;;
+  5)
+    echo_message "Starting Daemon..."
+    cd daemon && pm2 start daemon
+    echo_message "Daemon has been started!"
+    ;;
+  6)
     echo_message "Exiting..."
     exit 0
     ;;
@@ -60,7 +73,8 @@ esac
 
 # Prompt to install the daemon (wings) after panel installation
 if [[ "$choice" == "1" || "$choice" == "2" ]]; then
-  read -p "Do you want to install the daemon (wings)? (yes/no): " install_daemon
+  echo -e "${YELLOW}Do you want to install the daemon (wings)? (yes/no): ${NC}"
+  read install_daemon
   if [[ "$install_daemon" == "yes" || "$install_daemon" == "y" ]]; then
     echo_message "Installing Daemon (wings)..."
     bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/daemon)
