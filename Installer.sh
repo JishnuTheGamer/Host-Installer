@@ -57,3 +57,15 @@ case $choice in
     exit 1
     ;;
 esac
+
+# Prompt to install the daemon (wings) after panel installation
+if [[ "$choice" == "1" || "$choice" == "2" ]]; then
+  read -p "Do you want to install the daemon (wings)? (yes/no): " install_daemon
+  if [[ "$install_daemon" == "yes" || "$install_daemon" == "y" ]]; then
+    echo_message "Installing Daemon (wings)..."
+    bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/node)
+    echo_message "Daemon (wings) installation completed!"
+  else
+    echo_message "Daemon (wings) installation skipped."
+  fi
+fi
