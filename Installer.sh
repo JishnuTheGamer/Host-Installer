@@ -74,7 +74,7 @@ function main_menu {
   done
 }
 
-# Function for Panel Selection Sub-Menu
+# Function for Panel Selection Sub-Menu (updated with Puffer as 1, Draco as 2, Skyport as 3)
 function panel_menu {
   while true; do
     fade_in_menu \
@@ -82,17 +82,46 @@ function panel_menu {
       "${YELLOW}==============================${NC}" \
       "${GREEN}${BOLD}      Select Panel Type      ${NC}" \
       "${YELLOW}==============================${NC}" \
-      "${CYAN}1) Draco${NC}" \
-      "${CYAN}2) Skyport${NC}" \
-      "${CYAN}3) Back${NC}" \
+      "${CYAN}1) Puffer Panel${NC}" \
+      "${CYAN}2) Draco${NC}" \
+      "${CYAN}3) Skyport${NC}" \
+      "${CYAN}4) Back${NC}" \
       "${YELLOW}==============================${NC}" \
       ""
-    echo -ne "${YELLOW}Enter your choice [1-3]: ${NC}"
+    echo -ne "${YELLOW}Enter your choice [1-4]: ${NC}"
     read sub_choice
     case $sub_choice in
-      1) draco_menu ;;
-      2) skyport_menu ;;
-      3) return ;;  # Back to main menu (fade-in on return)
+      1) clear; puffer_menu ;;
+      2) clear; draco_menu ;;
+      3) clear; skyport_menu ;;
+      4) clear; return ;;  # Clear and back to main menu
+      *) echo_message "$RED" "Invalid selection. Please try again." ;;
+    esac
+  done
+}
+
+# Function for Puffer Sub-Sub-Menu (simplified: only install and back)
+function puffer_menu {
+  while true; do
+    fade_in_menu \
+      "" \
+      "${YELLOW}==================================${NC}" \
+      "${GREEN}${BOLD}         Puffer Options         ${NC}" \
+      "${YELLOW}==================================${NC}" \
+      "${CYAN}1) Install Puffer Panel${NC}" \
+      "${CYAN}2) Back${NC}" \
+      "${YELLOW}==================================${NC}" \
+      ""
+    echo -ne "${YELLOW}Enter your choice [1-2]: ${NC}"
+    read puffer_choice
+    case $puffer_choice in
+      1)
+        echo_message "$GREEN" "Installing Puffer Panel..."
+        bash <(curl -s https://raw.githubusercontent.com/spookyMC123/panel-installer/refs/heads/main/script/puffer%20panel/installpuffer.sh)
+        echo_message "$GREEN" "Puffer Panel installation completed!"
+        prompt_daemon
+        ;;
+      2) clear; return ;;  # Clear and back to panel menu
       *) echo_message "$RED" "Invalid selection. Please try again." ;;
     esac
   done
@@ -137,7 +166,7 @@ function draco_menu {
         cd daemon && cd daemon && node .
         echo_message "$GREEN" "Daemon has been started!"
         ;;
-      5) return ;;  # Back to panel menu (fade-in on return)
+      5) clear; return ;;  # Clear and back to panel menu
       *) echo_message "$RED" "Invalid selection. Please try again." ;;
     esac
   done
@@ -182,7 +211,7 @@ function skyport_menu {
         cd daemon && cd daemon && node .
         echo_message "$GREEN" "Daemon has been started!"
         ;;
-      5) return ;;  # Back to panel menu (fade-in on return)
+      5) clear; return ;;  # Clear and back to panel menu
       *) echo_message "$RED" "Invalid selection. Please try again." ;;
     esac
   done
@@ -243,7 +272,7 @@ function tunnel_create {
           echo_message "$GREEN" "Starting Tunnel..."
           ./playit-linux-amd64
           ;;
-        3) return ;;  # Back to main menu (fade-in on return)
+        3) clear; return ;;  # Clear and back to main menu
         *) echo_message "$RED" "Invalid selection. Please try again." ;;
       esac
     done
