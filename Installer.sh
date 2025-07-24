@@ -4,36 +4,72 @@
 # Author: [Your Name or GitHub Handle]
 
 # Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-CYAN='\033[0;36m'
-YELLOW='\033[1;33m' # Yellow for prompts
-NC='\033[0m' # No Color
+RED='\033[0;31m'      # Errors and warnings/disclaimers
+GREEN='\033[0;32m'    # Success messages and menu titles
+CYAN='\033[0;36m'     # Menu options and general messages
+YELLOW='\033[1;33m'   # Prompts and borders
+BOLD='\033[1m'        # Bold text for emphasis
+UNDERLINE='\033[4m'   # Underline for links
+NC='\033[0m'          # No Color
 
-# Function to display messages
+# Function to display messages (now with color parameter)
 function echo_message {
-  echo -e "${CYAN}$1${NC}"
+  local color="$1"
+  shift
+  echo -e "${color}$@${NC}"
+}
+
+# Function to simulate fade-in for menus (prints lines with delay)
+function fade_in_menu {
+  clear
+  for line in "$@"; do
+    echo -e "$line"  # Ensure -e is used for interpreting escape sequences
+    sleep 0.1  # Short delay for fade-in effect
+  done
 }
 
 # Check if the script is run as root
 if [ "$EUID" -ne 0 ]; then
-  echo -e "${RED}Please run this script as root.${NC}"
+  echo_message "$RED" "Please run this script as root."
   exit 1
 fi
+
+# Typing Animation for Credits (quick typing in 1.5s total)
+credit_text="${YELLOW}${BOLD}Credit by ${GREEN}${BOLD}Jishnu ${YELLOW}${BOLD}and ${CYAN}${BOLD}Joy !!!${NC}"
+clear
+echo -n ""  # Start on a new line
+displayed=""
+for (( i=0; i<${#credit_text}; i++ )); do
+  displayed="${displayed}${credit_text:$i:1}"
+  echo -ne "\r${displayed}"  # Overwrite the line with interpreted colors
+  sleep 0.05  # Adjusted delay for ~1.5s total typing
+done
+echo ""  # New line after typing
+sleep 1  # Brief hold after typing
+clear    # Clear screen before main menu
 
 # Function for Main Menu
 function main_menu {
   while true; do
-    echo_message "====================="
-    echo_message "Main Menu:"
-    echo "1) Install Panel"
-    echo "2) Exit"
-    echo_message "====================="
-    read -p "Enter your choice [1-2]: " choice
+    fade_in_menu \
+      "" \
+      "${YELLOW}============================${NC}" \
+      "${GREEN}${BOLD}         Main Menu         ${NC}" \
+      "${YELLOW}============================${NC}" \
+      "${CYAN}1) Install Panel${NC}" \
+      "${CYAN}2) 24/7 Run${NC}" \
+      "${CYAN}3) Tunnel Create${NC}" \
+      "${CYAN}4) Exit${NC}" \
+      "${YELLOW}============================${NC}" \
+      ""
+    echo -ne "${YELLOW}Enter your choice [1-4]: ${NC}"
+    read choice
     case $choice in
-      1) clear; panel_menu ;;  # Clear screen before sub-menu
-      2) echo_message "Exiting..."; exit 0 ;;
-      *) echo -e "${RED}Invalid selection. Try again.${NC}" ;;
+      1) panel_menu ;;
+      2) run_24_7 ;;
+      3) tunnel_create ;;
+      4) echo_message "$GREEN" "Exiting..."; exit 0 ;;
+      *) echo_message "$RED" "Invalid selection. Please try again." ;;
     esac
   done
 }
@@ -41,18 +77,23 @@ function main_menu {
 # Function for Panel Selection Sub-Menu
 function panel_menu {
   while true; do
-    echo_message "====================="
-    echo_message "Select Panel Type:"
-    echo "1) Draco"
-    echo "2) Skyport"
-    echo "3) Back"
-    echo_message "====================="
-    read -p "Enter your choice [1-3]: " sub_choice
+    fade_in_menu \
+      "" \
+      "${YELLOW}==============================${NC}" \
+      "${GREEN}${BOLD}      Select Panel Type      ${NC}" \
+      "${YELLOW}==============================${NC}" \
+      "${CYAN}1) Draco${NC}" \
+      "${CYAN}2) Skyport${NC}" \
+      "${CYAN}3) Back${NC}" \
+      "${YELLOW}==============================${NC}" \
+      ""
+    echo -ne "${YELLOW}Enter your choice [1-3]: ${NC}"
+    read sub_choice
     case $sub_choice in
-      1) clear; draco_menu ;;  # Clear screen before sub-sub-menu
-      2) clear; skyport_menu ;;  # Clear screen before sub-sub-menu
-      3) clear; return ;;  # Clear screen and back to main menu
-      *) echo -e "${RED}Invalid selection. Try again.${NC}" ;;
+      1) draco_menu ;;
+      2) skyport_menu ;;
+      3) return ;;  # Back to main menu (fade-in on return)
+      *) echo_message "$RED" "Invalid selection. Please try again." ;;
     esac
   done
 }
@@ -60,43 +101,44 @@ function panel_menu {
 # Function for Draco Sub-Sub-Menu
 function draco_menu {
   while true; do
-    echo_message "====================="
-    echo_message "Draco Options:"
-    echo "1) Install Draco Panel"
-    echo "2) Install Draco Daemon (wings)"
-    echo "3) Start Panel"
-    echo "4) Start Daemon"
-    echo "5) Back"
-    echo_message "====================="
-    read -p "Enter your choice [1-5]: " draco_choice
+    fade_in_menu \
+      "" \
+      "${YELLOW}==================================${NC}" \
+      "${GREEN}${BOLD}          Draco Options          ${NC}" \
+      "${YELLOW}==================================${NC}" \
+      "${CYAN}1) Install Draco Panel${NC}" \
+      "${CYAN}2) Install Draco Daemon (wings)${NC}" \
+      "${CYAN}3) Start Panel${NC}" \
+      "${CYAN}4) Start Daemon${NC}" \
+      "${CYAN}5) Back${NC}" \
+      "${YELLOW}==================================${NC}" \
+      ""
+    echo -ne "${YELLOW}Enter your choice [1-5]: ${NC}"
+    read draco_choice
     case $draco_choice in
       1)
-        echo_message "Installing Draco Panel..."
+        echo_message "$GREEN" "Installing Draco Panel..."
         bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/draco)
-        echo_message "Draco Panel installation completed!"
+        echo_message "$GREEN" "Draco Panel installation completed!"
         prompt_daemon
-        clear  # Clear screen after command
         ;;
       2)
-        echo_message "Installing Draco Daemon (wings)..."
+        echo_message "$GREEN" "Installing Draco Daemon (wings)..."
         bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/daemon)
-        echo_message "Draco Daemon (wings) installation completed!"
-        clear  # Clear screen after command
+        echo_message "$GREEN" "Draco Daemon (wings) installation completed!"
         ;;
       3)
-        echo_message "Starting Panel..."
+        echo_message "$GREEN" "Starting Panel..."
         cd panel && cd panel && node .
-        echo_message "Panel has been started!"
-        clear  # Clear screen after command
+        echo_message "$GREEN" "Panel has been started!"
         ;;
       4)
-        echo_message "Starting Daemon..."
+        echo_message "$GREEN" "Starting Daemon..."
         cd daemon && cd daemon && node .
-        echo_message "Daemon has been started!"
-        clear  # Clear screen after command
+        echo_message "$GREEN" "Daemon has been started!"
         ;;
-      5) clear; return ;;  # Clear screen and back to panel menu
-      *) echo -e "${RED}Invalid selection. Try again.${NC}" ;;
+      5) return ;;  # Back to panel menu (fade-in on return)
+      *) echo_message "$RED" "Invalid selection. Please try again." ;;
     esac
   done
 }
@@ -104,57 +146,122 @@ function draco_menu {
 # Function for Skyport Sub-Sub-Menu
 function skyport_menu {
   while true; do
-    echo_message "====================="
-    echo_message "Skyport Options:"
-    echo "1) Install Skyport Panel"
-    echo "2) Install Daemon (wings)"
-    echo "3) Start Panel"
-    echo "4) Start Daemon"
-    echo "5) Back"
-    echo_message "====================="
-    read -p "Enter your choice [1-5]: " skyport_choice
+    fade_in_menu \
+      "" \
+      "${YELLOW}==================================${NC}" \
+      "${GREEN}${BOLD}         Skyport Options         ${NC}" \
+      "${YELLOW}==================================${NC}" \
+      "${CYAN}1) Install Skyport Panel${NC}" \
+      "${CYAN}2) Install Daemon (wings)${NC}" \
+      "${CYAN}3) Start Panel${NC}" \
+      "${CYAN}4) Start Daemon${NC}" \
+      "${CYAN}5) Back${NC}" \
+      "${YELLOW}==================================${NC}" \
+      ""
+    echo -ne "${YELLOW}Enter your choice [1-5]: ${NC}"
+    read skyport_choice
     case $skyport_choice in
       1)
-        echo_message "Installing Skyport Panel..."
-        bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/skyport)
-        echo_message "Skyport Panel installation completed!"
+        echo_message "$GREEN" "Installing Skyport Panel..."
+        bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/skyport/refs/heads/main/panel)
+        echo_message "$GREEN" "Skyport Panel installation completed!"
         prompt_daemon
-        clear  # Clear screen after command
         ;;
       2)
-        echo_message "Installing Daemon (wings)..."
+        echo_message "$GREEN" "Installing Daemon (wings)..."
         bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/daemon)
-        echo_message "Daemon (wings) installation completed!"
-        clear  # Clear screen after command
+        echo_message "$GREEN" "Daemon (wings) installation completed!"
         ;;
       3)
-        echo_message "Starting Panel..."
+        echo_message "$GREEN" "Starting Panel..."
         cd panel && cd panel && node .
-        echo_message "Panel has been started!"
-        clear  # Clear screen after command
+        echo_message "$GREEN" "Panel has been started!"
         ;;
       4)
-        echo_message "Starting Daemon..."
+        echo_message "$GREEN" "Starting Daemon..."
         cd daemon && cd daemon && node .
-        echo_message "Daemon has been started!"
-        clear  # Clear screen after command
+        echo_message "$GREEN" "Daemon has been started!"
         ;;
-      5) clear; return ;;  # Clear screen and back to panel menu
-      *) echo -e "${RED}Invalid selection. Try again.${NC}" ;;
+      5) return ;;  # Back to panel menu (fade-in on return)
+      *) echo_message "$RED" "Invalid selection. Please try again." ;;
     esac
   done
 }
 
+# Function to run the 24/7 service
+function run_24_7 {
+  echo_message "$GREEN" "Running 24/7 service..."
+  python3 <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/24-7/refs/heads/main/24)
+}
+
+# Function for Tunnel Creation
+function tunnel_create {
+  fade_in_menu \
+    "" \
+    "${YELLOW}========================================${NC}" \
+    "${GREEN}${BOLD}            Tunnel Create            ${NC}" \
+    "${YELLOW}========================================${NC}" \
+    "" \
+    "${RED}${BOLD}          Important Disclaimer          ${NC}" \
+    "${RED}${BOLD}To connect this server, you must sign in${NC}" \
+    "${RED}${BOLD}or create an account at ${UNDERLINE}https://playit.gg/${NC}${RED}${BOLD}.${NC}" \
+    "${RED}${BOLD}This is required for tunnel functionality.${NC}" \
+    "" \
+    "${YELLOW}========================================${NC}" \
+    ""
+  echo -ne "${YELLOW}${BOLD}Do you want to proceed? (yes/no): ${NC}"
+  read proceed
+  if [[ "$proceed" == "yes" || "$proceed" == "y" ]]; then
+    while true; do
+      fade_in_menu \
+        "" \
+        "${YELLOW}==================================${NC}" \
+        "${GREEN}${BOLD}         Tunnel Options         ${NC}" \
+        "${YELLOW}==================================${NC}" \
+        "${CYAN}1) Create Tunnel${NC}" \
+        "${CYAN}2) Start Tunnel${NC}" \
+        "${CYAN}3) Back${NC}" \
+        "${YELLOW}==================================${NC}" \
+        ""
+      echo -ne "${YELLOW}Enter your choice [1-3]: ${NC}"
+      read tunnel_choice
+      case $tunnel_choice in
+        1)
+          # Simulate popup with 5s delay
+          clear
+          echo -e "${YELLOW}=============================${NC}"
+          echo -e "${RED}${BOLD} Wait for creating the link...${NC}"
+          echo -e "${YELLOW}=============================${NC}"
+          sleep 5
+          clear
+          echo_message "$GREEN" "Creating Tunnel..."
+          wget https://github.com/playit-cloud/playit-agent/releases/download/v0.15.26/playit-linux-amd64
+          chmod +x playit-linux-amd64
+          ./playit-linux-amd64
+          ;;
+        2)
+          echo_message "$GREEN" "Starting Tunnel..."
+          ./playit-linux-amd64
+          ;;
+        3) return ;;  # Back to main menu (fade-in on return)
+        *) echo_message "$RED" "Invalid selection. Please try again." ;;
+      esac
+    done
+  else
+    echo_message "$RED" "Tunnel creation canceled."
+  fi
+}
+
 # Function to prompt for daemon installation after panel install
 function prompt_daemon {
-  echo -e "${YELLOW}Do you want to install the daemon (wings)? (yes/no): ${NC}"
+  echo -ne "${YELLOW}${BOLD}Do you want to install the daemon (wings)? (yes/no): ${NC}"
   read install_daemon
   if [[ "$install_daemon" == "yes" || "$install_daemon" == "y" ]]; then
-    echo_message "Installing Daemon (wings)..."
+    echo_message "$GREEN" "Installing Daemon (wings)..."
     bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/daemon)
-    echo_message "Daemon (wings) installation completed!"
+    echo_message "$GREEN" "Daemon (wings) installation completed!"
   else
-    echo_message "Daemon (wings) installation skipped."
+    echo_message "$RED" "Daemon (wings) installation skipped."
   fi
 }
 
