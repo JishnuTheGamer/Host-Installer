@@ -24,11 +24,7 @@ fi
 # Function for Main Menu
 function main_menu {
   while true; do
-    echo_message "====================="
-    echo_message "Main Menu:"
-    echo "1) Install Panel"
-    echo "2) Exit"
-    echo_message "====================="
+    echo_message "===================== Main Menu: 1) Install Panel 2) Exit ====================="
     read -p "Enter your choice [1-2]: " choice
     case $choice in
       1) panel_menu ;;
@@ -41,12 +37,7 @@ function main_menu {
 # Function for Panel Selection Sub-Menu
 function panel_menu {
   while true; do
-    echo_message "====================="
-    echo_message "Select Panel Type:"
-    echo "1) Draco"
-    echo "2) Skyport"
-    echo "3) Back"
-    echo_message "====================="
+    echo_message "===================== Select Panel Type: 1) Draco 2) Skyport 3) Back ====================="
     read -p "Enter your choice [1-3]: " sub_choice
     case $sub_choice in
       1) draco_menu ;;
@@ -60,14 +51,7 @@ function panel_menu {
 # Function for Draco Sub-Sub-Menu
 function draco_menu {
   while true; do
-    echo_message "====================="
-    echo_message "Draco Options:"
-    echo "1) Install Draco Panel"
-    echo "2) Install Draco Daemon (wings)"
-    echo "3) Start Panel"
-    echo "4) Start Daemon"
-    echo "5) Back"
-    echo_message "====================="
+    echo_message "===================== Draco Options: 1) Install Draco Panel 2) Install Draco Daemon (wings) 3) Start Panel 4) Start Daemon 5) Back ====================="
     read -p "Enter your choice [1-5]: " draco_choice
     case $draco_choice in
       1)
@@ -83,12 +67,12 @@ function draco_menu {
         ;;
       3)
         echo_message "Starting Panel..."
-        cd v3panel && pm2 start panel
+        cd panel && cd panel && node .
         echo_message "Panel has been started!"
         ;;
       4)
         echo_message "Starting Daemon..."
-        cd daemon && pm2 start daemon
+        cd daemon && cd daemon && node .
         echo_message "Daemon has been started!"
         ;;
       5) return ;;  # Back to panel menu
@@ -100,14 +84,7 @@ function draco_menu {
 # Function for Skyport Sub-Sub-Menu
 function skyport_menu {
   while true; do
-    echo_message "====================="
-    echo_message "Skyport Options:"
-    echo "1) Install Skyport Panel"
-    echo "2) Install Daemon (wings)"
-    echo "3) Start Panel"
-    echo "4) Start Daemon"
-    echo "5) Back"
-    echo_message "====================="
+    echo_message "===================== Skyport Options: 1) Install Skyport Panel 2) Install Daemon (wings) 3) Start Panel 4) Start Daemon 5) Back ====================="
     read -p "Enter your choice [1-5]: " skyport_choice
     case $skyport_choice in
       1)
@@ -123,12 +100,12 @@ function skyport_menu {
         ;;
       3)
         echo_message "Starting Panel..."
-        cd v3panel && pm2 start panel
+        cd panel && cd panel && node .
         echo_message "Panel has been started!"
         ;;
       4)
         echo_message "Starting Daemon..."
-        cd daemon && pm2 start daemon
+        cd daemon && cd daemon && node .
         echo_message "Daemon has been started!"
         ;;
       5) return ;;  # Back to panel menu
