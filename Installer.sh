@@ -35,17 +35,17 @@ read -p "Enter your choice [1-4]: " choice
 case $choice in
   1)
     echo_message "Installing Draco Panel..."
-    bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/jishnu)
+    bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/draco)
     echo_message "Draco Panel installation completed!"
     ;;
   2)
     echo_message "Installing Skyport Panel..."
-    bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/skyport/refs/heads/main/panel)
+    bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/skyport)
     echo_message "Skyport Panel installation completed!"
     ;;
   3)
     echo_message "Running Daemon..."
-    bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/node)
+    bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/daemon)
     echo_message "Daemon has been executed!"
     ;;
   4)
@@ -63,7 +63,7 @@ if [[ "$choice" == "1" || "$choice" == "2" ]]; then
   read -p "Do you want to install the daemon (wings)? (yes/no): " install_daemon
   if [[ "$install_daemon" == "yes" || "$install_daemon" == "y" ]]; then
     echo_message "Installing Daemon (wings)..."
-    bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/node)
+    bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/daemon)
     echo_message "Daemon (wings) installation completed!"
   else
     echo_message "Daemon (wings) installation skipped."
