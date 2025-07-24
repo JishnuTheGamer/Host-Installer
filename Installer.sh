@@ -53,7 +53,7 @@ case $choice in
     ;;
   4)
     echo_message "Starting Panel..."
-    cd panel && cd panel && pm2 start index.js
+    cd panel && cd panel && pm2 start .
     echo_message "Panel has been started!"
     ;;
   5)
