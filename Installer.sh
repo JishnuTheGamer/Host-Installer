@@ -117,7 +117,7 @@ function puffer_menu {
     case $puffer_choice in
       1)
         echo_message "$GREEN" "Installing Puffer Panel..."
-        bash <(curl -s https://raw.githubusercontent.com/spookyMC123/panel-installer/refs/heads/main/script/puffer%20panel/installpuffer.sh)
+        bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/puffer-panel)
         echo_message "$GREEN" "Puffer Panel installation completed!"
         prompt_daemon
         ;;
