@@ -223,7 +223,7 @@ function skyport_menu {
         ;;
       3)
         echo_message "$GREEN" "Starting Panel..."
-        cd panel && cd panel && node .
+        cd panel && node .
         echo_message "$GREEN" "Panel has been started!"
         ;;
       4)
