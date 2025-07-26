@@ -173,7 +173,7 @@ function draco_menu {
         ;;
       4)
         echo_message "$GREEN" "Starting Daemon..."
-        cd Vortex-Deamon && node .
+        cd daemon && cd daemon && node .
         echo_message "$GREEN" "Daemon has been started!"
         ;;
       5) clear; return ;;  # Clear and back to panel menu
