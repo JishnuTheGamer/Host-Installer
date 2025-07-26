@@ -202,7 +202,7 @@ function skyport_menu {
     case $skyport_choice in
       1)
         echo_message "$GREEN" "Installing Skyport Panel..."
-        bash <(curl -s https://github.com/JishnuTheGamer/Vps/blob/main/skyport)
+        bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/skyport)
         echo_message "$GREEN" "Skyport Panel installation completed!"
         prompt_daemon "skyport"
         ;;
