@@ -34,7 +34,7 @@ if [ "$EUID" -ne 0 ]; then
   exit 1
 fi
 
-# Typing Animation for Credits (quick typing in 1.5s total)
+# Typing Animation for Credits (quick typing in 1s total)
 credit_text="${YELLOW}${BOLD}Credit by ${GREEN}${BOLD}Jishnu ${YELLOW}${BOLD}and ${CYAN}${BOLD}Joy !!!${NC}"
 clear
 echo -n ""  # Start on a new line
@@ -42,10 +42,10 @@ displayed=""
 for (( i=0; i<${#credit_text}; i++ )); do
   displayed="${displayed}${credit_text:$i:1}"
   echo -ne "\r${displayed}"  # Overwrite the line with interpreted colors
-  sleep 0.05  # Adjusted delay for ~1.5s total typing
+  sleep 0.025  # Adjusted delay for ~1 second total typing
 done
 echo ""  # New line after typing
-sleep 1  # Brief hold after typing
+sleep 0.5  # Brief hold after typing
 clear    # Clear screen before main menu
 
 # Function for Main Menu
@@ -119,7 +119,7 @@ function puffer_menu {
         echo_message "$GREEN" "Installing Puffer Panel..."
         bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/puffer-panel)
         echo_message "$GREEN" "Puffer Panel installation completed!"
-        prompt_daemon
+        prompt_daemon "puffer"
         ;;
       2) clear; return ;;  # Clear and back to panel menu
       *) echo_message "$RED" "Invalid selection. Please try again." ;;
@@ -149,12 +149,22 @@ function draco_menu {
         echo_message "$GREEN" "Installing Draco Panel..."
         bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/draco)
         echo_message "$GREEN" "Draco Panel installation completed!"
-        prompt_daemon
+        prompt_daemon "draco"
         ;;
       2)
         echo_message "$GREEN" "Installing Draco Daemon (wings)..."
         bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/daemon)
-        echo_message "$GREEN" "Draco Daemon (wings) installation completed!"
+        echo_message "$GREEN" "Your daemon(wings) is complet install make sure paste the 1 & 2 is your node (daemon)configure code"
+        echo -e "${CYAN}1) cd Vortex-Deamon${NC}"
+        echo -e "${CYAN}2) paste your configure${NC}"
+        echo -ne "${YELLOW}${BOLD}Do you want to go back? (yes/no): ${NC}"
+        read go_back
+        if [[ "$go_back" == "yes" ]]; then
+          draco_menu
+        else
+          echo_message "$GREEN" "Exiting..."
+          exit 0
+        fi
         ;;
       3)
         echo_message "$GREEN" "Starting Panel..."
@@ -192,14 +202,24 @@ function skyport_menu {
     case $skyport_choice in
       1)
         echo_message "$GREEN" "Installing Skyport Panel..."
-        bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/skyport/refs/heads/main/panel)
+        bash <(curl -s https://github.com/JishnuTheGamer/Vps/blob/main/skyport)
         echo_message "$GREEN" "Skyport Panel installation completed!"
-        prompt_daemon
+        prompt_daemon "skyport"
         ;;
       2)
         echo_message "$GREEN" "Installing Daemon (wings)..."
         bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/skyport/refs/heads/main/wings)
-        echo_message "$GREEN" "Daemon (wings) installation completed!"
+        echo_message "$GREEN" "Your daemon(wings) is complet install make sure paste the 1 & 2 is your node (daemon)configure code"
+        echo -e "${CYAN}1) cd skyportd${NC}"
+        echo -e "${CYAN}2) paste your configure${NC}"
+        echo -ne "${YELLOW}${BOLD}Do you want to go back? (yes/no): ${NC}"
+        read go_back
+        if [[ "$go_back" == "yes" ]]; then
+          skyport_menu
+        else
+          echo_message "$GREEN" "Exiting..."
+          exit 0
+        fi
         ;;
       3)
         echo_message "$GREEN" "Starting Panel..."
@@ -283,12 +303,37 @@ function tunnel_create {
 
 # Function to prompt for daemon installation after panel install
 function prompt_daemon {
+  local panel_type="$1"
   echo -ne "${YELLOW}${BOLD}Do you want to install the daemon (wings)? (yes/no): ${NC}"
   read install_daemon
   if [[ "$install_daemon" == "yes" || "$install_daemon" == "y" ]]; then
     echo_message "$GREEN" "Installing Daemon (wings)..."
-    bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/daemon)
-    echo_message "$GREEN" "Daemon (wings) installation completed!"
+    if [[ "$panel_type" == "skyport" ]]; then
+      bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/skyport/refs/heads/main/wings)
+    else
+      bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/daemon)
+    fi
+    echo_message "$GREEN" "Your daemon(wings) is complet install make sure paste the 1 & 2 is your node (daemon)configure code"
+    if [[ "$panel_type" == "skyport" ]]; then
+      echo -e "${CYAN}1) cd skyportd${NC}"
+    else
+      echo -e "${CYAN}1) cd Vortex-Deamon${NC}"
+    fi
+    echo -e "${CYAN}2) paste your configure${NC}"
+    echo -ne "${YELLOW}${BOLD}Do you want to go back? (yes/no): ${NC}"
+    read go_back
+    if [[ "$go_back" == "yes" ]]; then
+      if [[ "$panel_type" == "draco" ]]; then
+        draco_menu
+      elif [[ "$panel_type" == "skyport" ]]; then
+        skyport_menu
+      else
+        panel_menu
+      fi
+    else
+      echo_message "$GREEN" "Exiting..."
+      exit 0
+    fi
   else
     echo_message "$RED" "Daemon (wings) installation skipped."
   fi
