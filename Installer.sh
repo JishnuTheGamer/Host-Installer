@@ -198,7 +198,7 @@ function skyport_menu {
         ;;
       2)
         echo_message "$GREEN" "Installing Daemon (wings)..."
-        bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/daemon)
+        bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/skyport/refs/heads/main/wings)
         echo_message "$GREEN" "Daemon (wings) installation completed!"
         ;;
       3)
@@ -208,7 +208,7 @@ function skyport_menu {
         ;;
       4)
         echo_message "$GREEN" "Starting Daemon..."
-        cd Vortex-Deamon && node .
+        cd skyportd && node .
         echo_message "$GREEN" "Daemon has been started!"
         ;;
       5) clear; return ;;  # Clear and back to panel menu
