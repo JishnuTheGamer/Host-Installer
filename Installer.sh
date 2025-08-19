@@ -317,7 +317,7 @@ function prompt_daemon {
     if [[ "$panel_type" == "skyport" ]]; then
       echo -e "${CYAN}1) cd skyportd${NC}"
     else
-      echo -e "${CYAN}1) cd Vortex-Deamon${NC}"
+      echo -e "${CYAN}1) cd daemon && cd daemon${NC}"
     fi
     echo -e "${CYAN}2) paste your configure${NC}"
     echo -ne "${YELLOW}${BOLD}Do you want to go back? (yes/no): ${NC}"
