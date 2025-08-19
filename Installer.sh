@@ -155,7 +155,7 @@ function draco_menu {
         echo_message "$GREEN" "Installing Draco Daemon (wings)..."
         bash <(curl -s https://raw.githubusercontent.com/JishnuTheGamer/Vps/refs/heads/main/daemon)
         echo_message "$GREEN" "Your daemon(wings) is complet install make sure paste the 1 & 2 is your node (daemon)configure code"
-        echo -e "${CYAN}1) cd Vortex-Deamon${NC}"
+        echo -e "${CYAN}1) cd daemon && cd daemon${NC}"
         echo -e "${CYAN}2) paste your configure${NC}"
         echo -ne "${YELLOW}${BOLD}Do you want to go back? (yes/no): ${NC}"
         read go_back
